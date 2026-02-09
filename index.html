@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DANA Hacker Pink - BayuDubai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        /* RESET & TEMA HACKER */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            background-color: #0d0208; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 0; 
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Background Animasi Matrix Pink */
+        #matrix-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; opacity: 0.4;
+        }
+
+        /* Teks Berjalan */
+        .marquee-top {
+            width: 100%; background: #ff007f; color: #000;
+            padding: 10px 0; font-family: 'Fira Code', monospace;
+            font-weight: 900; font-size: 14px;
+            white-space: nowrap; overflow: hidden;
+            position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 0 20px #ff007f;
+        }
+
+        .marquee-top span {
+            display: inline-block; padding-left: 100%;
+            animation: marquee 15s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
+
+        /* Struk DANA */
+        #capture {
+            width: 100%; max-width: 412px; background-color: white; 
+            position: relative; padding-bottom: 20px; margin-top: 30px;
+            box-shadow: 0 0 35px rgba(255, 0, 127, 0.6); border-radius: 4px;
+        }
+
+        .blue-header { background-color: #108ee9; height: 215px; width: 100%; padding: 5px 14px; position: absolute; top: 0; z-index: 1; }
+        .header-content { display: flex; align-items: center; color: white; padding: 12px 5px; position: relative; z-index: 2; }
+        .back-btn { font-size: 28px; margin-right: 15px; font-weight: 300; line-height: 1; }
+        .header-title { font-size: 19px; font-weight: 500; }
+        
+        /* Mengaktifkan bg_pattern.png */
+        .card { 
+            background-color: white; 
+            background-image: url('bg_pattern.png');
+            background-size: contain;
+            background-repeat: repeat-y;
+            border-radius: 12px; 
+            position: relative; 
+            z-index: 3; 
+            margin: 60px 16px 0 16px; 
+            border: 1px solid rgba(0,0,0,0.06); 
+            overflow: hidden; 
+            padding-top: 25px; 
+        }
+
+        .px-20 { padding: 0 20px; }
+        .logo-section { text-align: center; margin-bottom: 22px; } 
+        .logo-dana { width: 160px; height: auto; }
+        .meta-row { display: flex; justify-content: space-between; padding-bottom: 12px; color: #757575; font-size: 12.5px; }
+        .separator { width: 100%; border-top: 1.5px dashed #e8e8e8; margin-bottom: 18px; }
+        .status-row { display: flex; align-items: center; margin-bottom: 10px; }
+        .icon-check { width: 18px; height: 18px; margin-right: 8px; }
+        .status-text { color: #828282; font-weight: 500; font-size: 14px; }
+        .description { font-size: 14.5px; font-weight: 700; line-height: 1.4; color: #333; margin-bottom: 25px; }
+        .total-box { background-color: #f1f9ff; display: flex; justify-content: space-between; align-items: center; padding: 14px; border-radius: 8px; margin-bottom: 25px; }
+        .total-label { font-weight: 700; font-size: 14px; color: #333; } 
+        .amount { font-weight: 700; font-size: 18px; color: #111; }
+        .method-row { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 20px; }
+        .method-label { color: #888; font-size: 13.5px; }
+        .method-value { text-align: right; font-weight: 500; color: #222; font-size: 13.5px; }
+
+        /* PANEL ADMIN */
+        .admin-panel { 
+            width: 92%; max-width: 412px; background: rgba(20, 0, 10, 0.95); 
+            margin: 40px 0 120px 0; padding: 25px; border-radius: 10px; 
+            border: 2px solid #ff007f; box-shadow: 0 0 20px #ff007f;
+            backdrop-filter: blur(10px);
+        }
+
+        .warning-note {
+            background: rgba(255, 0, 127, 0.1);
+            border: 1px dashed #ff007f;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            color: #ffb3d9;
+            font-size: 12px;
+            line-height: 1.5;
+            font-family: 'Fira Code', monospace;
+        }
+        .warning-note b { color: #ff007f; text-shadow: 0 0 5px #ff007f; }
+
+        .panel-title {
+            color: #ff007f; font-family: 'Fira Code', monospace;
+            font-weight: 700; text-align: center; margin-bottom: 25px;
+            text-shadow: 0 0 10px #ff007f; font-size: 15px;
+        }
+
+        .input-group { margin-bottom: 18px; }
+        .input-group label { display: block; font-size: 11px; font-weight: 700; color: #ff007f; margin-bottom: 6px; font-family: 'Fira Code', monospace; }
+        .input-group input { 
+            width: 100%; padding: 12px; background: #1a000d; border: 1px solid #ff007f; 
+            color: #ffb3d9; font-family: 'Fira Code', monospace; font-size: 14px; 
+            outline: none; border-radius: 5px;
+        }
+
+        .grid-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+        .btn-save { 
+            width: 100%; padding: 16px; background: #ff007f; color: #000; 
+            border: none; font-family: 'Fira Code', monospace; font-weight: 900; 
+            cursor: pointer; font-size: 16px; margin-top: 15px;
+            clip-path: polygon(5% 0, 100% 0, 95% 100%, 0% 100%);
+            transition: 0.2s;
+        }
+        .btn-save:active { transform: scale(0.98); }
+
+        .footer-warning {
+            width: 100%; background: #ff007f; color: #000;
+            text-align: center; padding: 15px; font-weight: 900;
+            font-family: 'Fira Code', monospace; font-size: 13px;
+            position: fixed; bottom: 0; left: 0; z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="matrix-bg"></canvas>
+
+<div class="marquee-top">
+    <span>[SISTEM DIRETAS] Welcome TRANSFER DANA FAKE By.BayuDubai — AKSES DITERIMA — DIBUAT OLEH BAYUDUBAI — [SISTEM DIRETAS]</span>
+</div>
+
+<div id="capture">
+    <div class="blue-header">
+        <div class="header-content"><span class="back-btn">‹</span><span class="header-title">Detail Transaksi</span></div>
+    </div>
+    <div class="card">
+        <div class="px-20">
+            <div class="logo-section"><img src="logo_dana.png" alt="DANA" class="logo-dana"></div>
+            <div class="meta-row">
+                <span id="txt-waktu">-- --- 2026 • --:--</span>
+                <span>ID DANA <span id="txt-pref">0812</span>••••<span id="txt-hp">1995</span></span>
+            </div>
+        </div>
+        <div class="separator"></div>
+        <div class="px-20">
+            <div class="status-row">
+                <img src="centang_ijo.png" alt="check" class="icon-check">
+                <span class="status-text">Transaksi berhasil!</span>
+            </div>
+            <div class="description">
+                Kirim Uang <span id="disp-nom1">Rp200.000</span> ke <span id="txt-nama">BAYU KURNIAWAN</span> - <span id="txt-bank">JAGO</span> ••••<span id="txt-rek">5438</span>
+            </div>
+            <div class="total-box">
+                <span class="total-label">Total Bayar</span>
+                <span class="amount" id="disp-nom2">Rp200.000</span>
+            </div>
+            <div class="method-row">
+                <span class="method-label">Metode Pembayaran</span>
+                <span class="method-value">Saldo DANA<br>(SmartPay)</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="admin-panel">
+    <div class="warning-note">
+        <b>[!] PERINGATAN PENTING:</b><br>
+        JANGAN DI SEBAR! Jika web ini disebarkan tanpa sepengetahuan BayuDubai, maka web ini akan <b>DIHAPUS/HILANG</b> secara permanen dari server. Harap gunakan dengan bijak.
+    </div>
+
+    <div class="panel-title">>_ INJEKSI_DATA_BAYUDUBAI</div>
+    
+    <div class="input-group">
+        <label>WAKTU_TRANSAKSI</label>
+        <input type="text" id="in-waktu" placeholder="Contoh: 10 Feb 2026 • 02:30" oninput="upd()">
+    </div>
+    
+    <div class="input-group">
+        <label>NOMINAL_UANG</label>
+        <input type="number" id="in-nom" value="200000" oninput="upd()">
+    </div>
+    
+    <div class="input-group">
+        <label>NAMA_PENERIMA</label>
+        <input type="text" id="in-nama" value="BAYU KURNIAWAN" oninput="upd()">
+    </div>
+
+    <div class="grid-row">
+        <div class="input-group">
+            <label>NAMA_BANK</label>
+            <input type="text" id="in-bank" value="JAGO" oninput="upd()">
+        </div>
+        <div class="input-group">
+            <label>4_DIGIT_REK</label>
+            <input type="text" id="in-rek" value="5438" maxlength="4" oninput="upd()">
+        </div>
+    </div>
+
+    <div class="grid-row">
+        <div class="input-group">
+            <label>ID_DANA_AWAL</label>
+            <input type="text" id="in-pref" value="0812" maxlength="4" oninput="upd()">
+        </div>
+        <div class="input-group">
+            <label>ID_DANA_AKHIR</label>
+            <input type="text" id="in-hp" value="1995" maxlength="4" oninput="upd()">
+        </div>
+    </div>
+
+    <button class="btn-save" onclick="save()">EKSEKUSI & SIMPAN</button>
+</div>
+
+<div class="footer-warning">
+    AREA TERLARANG: JANGAN DI SEBAR (By.BayuDUBAI)
+</div>
+
+<script>
+    const canvas = document.getElementById('matrix-bg');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*";
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+    const drops = Array(Math.floor(columns)).fill(1);
+
+    function drawMatrix() {
+        ctx.fillStyle = "rgba(13, 2, 8, 0.08)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#ff007f";
+        ctx.font = fontSize + "px monospace";
+        for (let i = 0; i < drops.length; i++) {
+            const text = letters[Math.floor(Math.random() * letters.length)];
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+            drops[i]++;
+        }
+    }
+    setInterval(drawMatrix, 50);
+
+    function formatRupiah(angka) { return "Rp" + new Intl.NumberFormat('id-ID').format(angka); }
+
+    function upd() {
+        const nom = document.getElementById('in-nom').value;
+        const formatted = formatRupiah(nom);
+        document.getElementById('disp-nom1').innerText = formatted;
+        document.getElementById('disp-nom2').innerText = formatted;
+        document.getElementById('txt-waktu').innerText = document.getElementById('in-waktu').value;
+        document.getElementById('txt-nama').innerText = document.getElementById('in-nama').value;
+        document.getElementById('txt-pref').innerText = document.getElementById('in-pref').value;
+        document.getElementById('txt-hp').innerText = document.getElementById('in-hp').value;
+        document.getElementById('txt-bank').innerText = document.getElementById('in-bank').value;
+        document.getElementById('txt-rek').innerText = document.getElementById('in-rek').value;
+    }
+
+    function init() {
+        const d = new Date();
+        const jktTime = new Date(d.toLocaleString("en-US", {timeZone: "Asia/Jakarta"}));
+        const m = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+        const str = `${jktTime.getDate().toString().padStart(2, '0')} ${m[jktTime.getMonth()]} ${jktTime.getFullYear()} • ${jktTime.getHours().toString().padStart(2, '0')}:${jktTime.getMinutes().toString().padStart(2, '0')}`;
+        document.getElementById('in-waktu').value = str;
+        upd();
+    }
+
+    function save() {
+        html2canvas(document.getElementById('capture'), { 
+            scale: 3,
+            useCORS: true,
+            allowTaint: true
+        }).then(c => {
+            const a = document.createElement('a');
+            a.download = 'Bukti_Transfer_Fake.png';
+            a.href = c.toDataURL();
+            a.click();
+        });
+    }
+    window.onload = init;
+</script>
+
+</body>
+</html>
