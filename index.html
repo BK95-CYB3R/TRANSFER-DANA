@@ -119,11 +119,13 @@
 
         .input-group { margin-bottom: 18px; }
         .input-group label { display: block; font-size: 11px; font-weight: 700; color: #ff007f; margin-bottom: 6px; font-family: 'Fira Code', monospace; }
-        .input-group input { 
+        .input-group input, .input-group select { 
             width: 100%; padding: 12px; background: #1a000d; border: 1px solid #ff007f; 
             color: #ffb3d9; font-family: 'Fira Code', monospace; font-size: 14px; 
             outline: none; border-radius: 5px;
         }
+        /* Style khusus select agar panah terlihat */
+        .input-group select option { background: #1a000d; color: #ffb3d9; }
 
         .grid-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
@@ -211,7 +213,23 @@
     <div class="grid-row">
         <div class="input-group">
             <label>NAMA_BANK</label>
-            <input type="text" id="in-bank" value="JAGO" oninput="upd()">
+            <select id="in-bank" onchange="upd()">
+                <option value="BCA">BCA</option>
+                <option value="BRI">BRI</option>
+                <option value="MANDIRI">MANDIRI</option>
+                <option value="BNI">BNI</option>
+                <option value="BSI">BSI</option>
+                <option value="JAGO" selected>BANK JAGO</option>
+                <option value="SEABANK">SEABANK</option>
+                <option value="ALADIN">BANK ALADIN</option>
+                <option value="NEO COMMERCE">BANK NEO</option>
+                <option value="CIMB NIAGA">CIMB NIAGA</option>
+                <option value="PERMATA">BANK PERMATA</option>
+                <option value="DANAMON">DANAMON</option>
+                <option value="BTN">BTN</option>
+                <option value="LINE BANK">LINE BANK</option>
+                <option value="BLU">BLU by BCA</option>
+            </select>
         </div>
         <div class="input-group">
             <label>4_DIGIT_REK</label>
@@ -301,3 +319,4 @@
 
 </body>
 </html>
+
