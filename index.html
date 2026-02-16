@@ -20,14 +20,12 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* Background Animasi Matrix Pink */
         #matrix-bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1; opacity: 0.4;
         }
 
-        /* Teks Berjalan */
         .marquee-top {
             width: 100%; background: #ff007f; color: #000;
             padding: 10px 0; font-family: 'Fira Code', monospace;
@@ -47,7 +45,6 @@
             100% { transform: translate(-100%, 0); }
         }
 
-        /* Struk DANA */
         #capture {
             width: 100%; max-width: 412px; background-color: white; 
             position: relative; padding-bottom: 20px; margin-top: 30px;
@@ -59,7 +56,6 @@
         .back-btn { font-size: 28px; margin-right: 15px; font-weight: 300; line-height: 1; }
         .header-title { font-size: 19px; font-weight: 500; }
         
-        /* Mengaktifkan bg_pattern.png */
         .card { 
             background-color: white; 
             background-image: url('bg_pattern.png');
@@ -78,7 +74,14 @@
         .logo-section { text-align: center; margin-bottom: 22px; } 
         .logo-dana { width: 160px; height: auto; }
         .meta-row { display: flex; justify-content: space-between; padding-bottom: 12px; color: #757575; font-size: 12.5px; }
-        .separator { width: 100%; border-top: 1.5px dashed #e8e8e8; margin-bottom: 18px; }
+        
+        /* GARIS DASHED DIKURANGI KANAN KIRI */
+        .separator { 
+            width: calc(100% - 40px); /* Kurangi 20px kanan, 20px kiri */
+            border-top: 1.5px dashed #e8e8e8; 
+            margin: 0 auto 18px auto; /* Centered */
+        }
+
         .status-row { display: flex; align-items: center; margin-bottom: 10px; }
         .icon-check { width: 18px; height: 18px; margin-right: 8px; }
         .status-text { color: #828282; font-weight: 500; font-size: 14px; }
@@ -90,7 +93,6 @@
         .method-label { color: #888; font-size: 13.5px; }
         .method-value { text-align: right; font-weight: 500; color: #222; font-size: 13.5px; }
 
-        /* PANEL ADMIN */
         .admin-panel { 
             width: 92%; max-width: 412px; background: rgba(20, 0, 10, 0.95); 
             margin: 40px 0 120px 0; padding: 25px; border-radius: 10px; 
@@ -124,7 +126,6 @@
             color: #ffb3d9; font-family: 'Fira Code', monospace; font-size: 14px; 
             outline: none; border-radius: 5px;
         }
-        /* Style khusus select agar panah terlihat */
         .input-group select option { background: #1a000d; color: #ffb3d9; }
 
         .grid-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -172,7 +173,7 @@
                 <img src="centang_ijo.png" alt="check" class="icon-check">
                 <span class="status-text">Transaksi berhasil!</span>
             </div>
-            <div class="description">
+            <div class="description" id="full-desc">
                 Kirim Uang <span id="disp-nom1">Rp200.000</span> ke <span id="txt-nama">BAYU KURNIAWAN</span> - <span id="txt-bank">JAGO</span> ••••<span id="txt-rek">5438</span>
             </div>
             <div class="total-box">
@@ -212,7 +213,7 @@
 
     <div class="grid-row">
         <div class="input-group">
-            <label>NAMA_BANK</label>
+            <label>TUJUAN_TRANSFER</label>
             <select id="in-bank" onchange="upd()">
                 <option value="BCA">BCA</option>
                 <option value="BRI">BRI</option>
@@ -222,28 +223,33 @@
                 <option value="JAGO" selected>BANK JAGO</option>
                 <option value="SEABANK">SEABANK</option>
                 <option value="ALADIN">BANK ALADIN</option>
-                <option value="NEO COMMERCE">BANK NEO</option>
-                <option value="CIMB NIAGA">CIMB NIAGA</option>
+                <option value="NEO">BANK NEO</option>
+                <option value="CIMB">CIMB NIAGA</option>
                 <option value="PERMATA">BANK PERMATA</option>
                 <option value="DANAMON">DANAMON</option>
                 <option value="BTN">BTN</option>
-                <option value="LINE BANK">LINE BANK</option>
+                <option value="LINE">LINE BANK</option>
                 <option value="BLU">BLU by BCA</option>
+                <option value="SESAMA DANA">SESAMA DANA</option>
+                <option value="OVO">OVO</option>
+                <option value="GOPAY">GOPAY</option>
+                <option value="SHOPEEPAY">SHOPEEPAY</option>
+                <option value="LINKAJA">LINKAJA</option>
             </select>
         </div>
         <div class="input-group">
-            <label>4_DIGIT_REK</label>
+            <label>4_DIGIT_REK/HP</label>
             <input type="text" id="in-rek" value="5438" maxlength="4" oninput="upd()">
         </div>
     </div>
 
     <div class="grid-row">
         <div class="input-group">
-            <label>ID_DANA_AWAL</label>
+            <label>ID_DANA_PENGIRIM_AWAL</label>
             <input type="text" id="in-pref" value="0812" maxlength="4" oninput="upd()">
         </div>
         <div class="input-group">
-            <label>ID_DANA_AKHIR</label>
+            <label>ID_DANA_PENGIRIM_AKHIR</label>
             <input type="text" id="in-hp" value="1995" maxlength="4" oninput="upd()">
         </div>
     </div>
@@ -283,14 +289,33 @@
     function upd() {
         const nom = document.getElementById('in-nom').value;
         const formatted = formatRupiah(nom);
+        const bank = document.getElementById('in-bank').value;
+        const nama = document.getElementById('in-nama').value;
+        const rek = document.getElementById('in-rek').value;
+
         document.getElementById('disp-nom1').innerText = formatted;
         document.getElementById('disp-nom2').innerText = formatted;
         document.getElementById('txt-waktu').innerText = document.getElementById('in-waktu').value;
-        document.getElementById('txt-nama').innerText = document.getElementById('in-nama').value;
+        document.getElementById('txt-nama').innerText = nama;
         document.getElementById('txt-pref').innerText = document.getElementById('in-pref').value;
         document.getElementById('txt-hp').innerText = document.getElementById('in-hp').value;
-        document.getElementById('txt-bank').innerText = document.getElementById('in-bank').value;
-        document.getElementById('txt-rek').innerText = document.getElementById('in-rek').value;
+
+        // Logika Otomatis E-Wallet vs Bank
+        const ewallets = ["SESAMA DANA", "OVO", "GOPAY", "SHOPEEPAY", "LINKAJA"];
+        const descArea = document.getElementById('full-desc');
+        
+        if (ewallets.includes(bank)) {
+            // Jika E-Wallet: Format Nomor HP (08xx••••1234) tanpa kurung
+            const randomPrefix = ["0812", "0813", "0857", "0895", "0877"][Math.floor(Math.random() * 5)];
+            if (bank === "SESAMA DANA") {
+                descArea.innerHTML = `Kirim Uang <span id="disp-nom1">${formatted}</span> ke <span id="txt-nama">${nama}</span> ${randomPrefix}••••${rek}`;
+            } else {
+                descArea.innerHTML = `Kirim Uang <span id="disp-nom1">${formatted}</span> ke <span id="txt-nama">${nama}</span> - ${bank} ${randomPrefix}••••${rek}`;
+            }
+        } else {
+            // Jika Bank: Format Rekening (BANK ••••1234)
+            descArea.innerHTML = `Kirim Uang <span id="disp-nom1">${formatted}</span> ke <span id="txt-nama">${nama}</span> - <span id="txt-bank">${bank}</span> ••••<span id="txt-rek">${rek}</span>`;
+        }
     }
 
     function init() {
